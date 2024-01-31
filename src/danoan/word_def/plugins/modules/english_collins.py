@@ -1,11 +1,13 @@
 from danoan.dictionaries.collins.core import api as collins_api, model as collins_model
 
+from danoan.word_def.plugins.core import exception
+
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 import json
 from pathlib import Path
 import pycountry
-from typing import List, Optional
+from typing import List, Optional, Type
 import toml
 
 
@@ -34,22 +36,22 @@ class Adapter:
             html_soup = BeautifulSoup(html_data, "lxml")
 
             list_of_span_defs = html_soup.css.select(".def")
-            list_of_definitions = list(map(lambda x: x.contents[0], list_of_span_defs))
+            list_of_definitions = list(
+                map(lambda x: x.contents[0], list_of_span_defs))
             return list_of_definitions
         else:
-            # TODO: Implement exception.
-            pass
+            raise exception.UnexpectedResponse(
+                response.status_code, response.text)
 
 
-def get_language() -> str:
-    return pycountry.languages.get(name="english").alpha_3
+class AdapterFactory:
+    def get_language(self) -> str:
+        return pycountry.languages.get(name="english").alpha_3
 
+    def get_adapter(self, configuration_filepath: Optional[Path] = None) -> Adapter:
+        if configuration_filepath is None:
+            raise exception.ConfigurationFileRequired()
 
-def get_adapater(configuration_filepath: Optional[Path] = None) -> str:
-    if configuration_filepath is None:
-        # TODO: Implement exception.
-        pass
-
-    with open(configuration_filepath, "r") as f:
-        configuration = toml.load(f)
-        return Adapter(configuration)
+        with open(configuration_filepath, "r") as f:
+            configuration = toml.load(f)
+            return Adapter(configuration)

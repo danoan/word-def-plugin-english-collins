@@ -20,7 +20,10 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["beautifulsoup4","pycountry","collins-dictionary-api-client @ file:///home/daniel/Projects/Git/collins-dictionary-api-client"]
+dependencies = ["beautifulsoup4","pycountry", "toml",
+"collins-dictionary-api-client @ git+https://github.com/danoan/collins-dictionary-api-client.git",
+"word-def-plugin-core @ git+https://github.com/danoan/word-def-plugin-core.git"
+]
 
 [project.urls]
 Documentation = "https://github.com/danoan/word-def-plugin-english-collins#readme"
