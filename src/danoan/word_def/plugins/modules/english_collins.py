@@ -20,8 +20,8 @@ class Adapter:
     def __init__(self, configuration: Configuration):
         self.configuration = configuration
 
-    def get_definition(self, word: str) -> List[str]:
-        response = collins_api.get_best_matching(
+    def _get_definition_api(self, word: str):
+        return collins_api.get_best_matching(
             self.configuration.entrypoint,
             self.configuration.secret_key,
             collins_model.Language.English,
@@ -29,18 +29,21 @@ class Adapter:
             collins_model.Format.JSON,
         )
 
+    def _get_definition_handle(self, response: collins_api.requests.Response):
         if response.status_code == 200:
             response_json = json.loads(response.text)
             html_data = response_json["entryContent"]
             html_soup = BeautifulSoup(html_data, "lxml")
 
             list_of_span_defs = html_soup.css.select(".def")
-            list_of_definitions = list(
-                map(lambda x: x.contents[0], list_of_span_defs))
+            list_of_definitions = list(map(lambda x: x.contents[0], list_of_span_defs))
             return list_of_definitions
         else:
-            raise exception.UnexpectedResponseError(
-                response.status_code, response.text)
+            raise exception.UnexpectedResponseError(response.status_code, response.text)
+
+    def get_definition(self, word: str) -> List[str]:
+        response = self._get_definition_api(word)
+        return self._get_definition_handle(response)
 
 
 class AdapterFactory(model.PluginFactory):
