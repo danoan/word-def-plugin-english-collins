@@ -22,7 +22,7 @@ classifiers = [
 ]
 dependencies = ["beautifulsoup4","pycountry", "toml",
 "collins-dictionary-api-client @ git+https://github.com/danoan/collins-dictionary-api-client.git",
-"word-def-plugin-core @ git+https://github.com/danoan/word-def-plugin-core.git@dmartins/v0.1.0"
+"word-def @ git+https://github.com/danoan/word-def.git@dmartins/v0.1.0"
 ]
 
 [project.urls]

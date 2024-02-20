@@ -1,6 +1,6 @@
-from danoan.dictionaries.collins.core import api as collins_api, model as collins_model
+from danoan.word_def.core import exception
 
-from danoan.word_def.plugins.core import exception, model
+from danoan.dictionaries.collins.core import api as collins_api, model as collins_model
 
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
@@ -36,17 +36,22 @@ class Adapter:
             html_soup = BeautifulSoup(html_data, "lxml")
 
             list_of_span_defs = html_soup.css.select(".def")
-            list_of_definitions = list(map(lambda x: x.contents[0], list_of_span_defs))
+            list_of_definitions = []
+            for potential_definition in list_of_span_defs:
+                content = potential_definition.contents[0].strip()
+                if len(content) > 3:
+                    list_of_definitions.append(content)
             return list_of_definitions
         else:
-            raise exception.UnexpectedResponseError(response.status_code, response.text)
+            raise exception.UnexpectedResponseError(
+                response.status_code, response.text)
 
     def get_definition(self, word: str) -> List[str]:
         response = self._get_definition_api(word)
         return self._get_definition_handle(response)
 
 
-class AdapterFactory(model.PluginFactory):
+class AdapterFactory:
     def get_language(self) -> str:
         return pycountry.languages.get(name="english").alpha_3
 
