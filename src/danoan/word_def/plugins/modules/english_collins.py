@@ -37,9 +37,17 @@ class Adapter:
 
             list_of_span_defs = html_soup.css.select(".def")
             list_of_definitions = []
+            # TODO: This could be improved. The response contains much more
+            # tagged information than the definition but it is not that
+            # straightforward to parse, that is why we are limiting ourselves
+            # to take the definition.
+            # Due to how the HTML is written, the text of the definition is
+            # sometimes spread over more than two tags. We are limiting ourselves
+            # to the `def` tag. We use the character count limit of 16 to avoid
+            # situations in which we collect incomplete phrasings.
             for potential_definition in list_of_span_defs:
                 content = potential_definition.contents[0].strip()
-                if len(content) > 3:
+                if len(content) > 16:
                     list_of_definitions.append(content)
             return list_of_definitions
         else:
