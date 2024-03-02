@@ -1,7 +1,7 @@
-Welcome to Word Def Plugin English Collins's documentation!
+Welcome to word-def Plugin English Collins's documentation!
 ==========================================
 
-Plugin to word-def package that connects to the English Collins dictionary
+Plugin to word-def package that connects with the English Collins dictionary API.
 
 Start here
 ================
@@ -9,38 +9,3 @@ Start here
    :maxdepth: 1
 
    getting-started
-
-
-How-to guides
-=============
-
-.. toctree::
-   :maxdepth: 1
-
-   how-to/
-
-
-Reference guides
-================
-
-.. toctree::
-   :maxdepth: 2
-
-   reference/
-
-
-Explanation
-===========
-
-.. toctree::
-   :maxdepth: 2
-
-   design-and-architecture
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
