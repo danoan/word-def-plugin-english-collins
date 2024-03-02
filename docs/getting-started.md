@@ -32,4 +32,4 @@ $ word-def --plugin-configuration-filepath plugin-config.toml get-definition joy
 
 ## Contributing
 
-Please reference to our [contribution](http://danoan.github.io/word-def-plugin-english-collins/contributing) and [code-of-conduct](http://danoan.github.io/word-def-plugin-english-collins/docs/code-of-conduct) guidelines.
+Please reference to our [contribution](http://danoan.github.io/word-def-plugin-english-collins/contributing) and [code-of-conduct](http://danoan.github.io/word-def-plugin-english-collins/code-of-conduct) guidelines.
