@@ -1,0 +1,15 @@
+danoan.word\_def.plugins.modules namespace
+==========================================
+
+.. py:module:: danoan.word_def.plugins.modules
+
+Submodules
+----------
+
+danoan.word\_def.plugins.modules.english\_collins module
+--------------------------------------------------------
+
+.. automodule:: danoan.word_def.plugins.modules.english_collins
+   :members:
+   :undoc-members:
+   :show-inheritance:
