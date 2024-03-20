@@ -29,6 +29,14 @@ $ word-def --plugin-configuration-filepath plugin-config.toml get-definition joy
 5. to make joyful; gladden
 ```
 
+```{admonition} Plugin configuration
+   The [word-def documentation](https://danoan.github.io/word-def/how-to/setup-a-plugin.html)
+   has more information about how to setup the plugin configuration file.
+```
+
+The list of parameters accepted by the plugin is the same as the members of the
+dataclass [Configuration](https://danoan.github.io/word-def-plugin-multilanguage-chatgpt/reference/danoan.word_def.plugins.modules.html#danoan.word_def.plugins.modules.english_collins.Configuration).
+
 
 ## Contributing
 

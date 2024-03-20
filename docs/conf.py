@@ -33,6 +33,7 @@ author = "Daniel Martins Antunes"
 
 extensions = [
     "sphinx.ext.autodoc",  # Collect docstrings
+    "sphinx.ext.autosummary",
     "sphinx.ext.autodoc.typehints",  # Use typehints
     "sphinx.ext.napoleon",  # NumPy and Google docstring format
     "sphinx.ext.viewcode",  # Source code link at function, class, module documentation
