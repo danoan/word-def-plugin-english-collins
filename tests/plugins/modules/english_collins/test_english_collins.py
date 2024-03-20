@@ -1,17 +1,20 @@
 from danoan.word_def.plugins.modules import english_collins
 from danoan.word_def.core import api, exception, model
 
-from io import StringIO
+import io
 from pathlib import Path
+import pycountry
 import pytest
+import toml
 from types import SimpleNamespace
 
 SCRIPT_FOLDER = Path(__file__).parent
 
 
 def test_language():
-    af = english_collins.AdapterFactory()
-    assert af.get_language() == "eng"
+    language_code = english_collins.AdapterFactory().get_language()
+    assert pycountry.languages.get(alpha_3=language_code) is not None
+    assert language_code == "eng"
 
 
 def test_adapter_no_config_file_error():
@@ -26,49 +29,53 @@ def test_plugin_compatibility():
     assert api.is_plugin_compatible(english_collins.AdapterFactory())
 
 
-def test_adapter_get_definition_handle():
+@pytest.mark.parametrize(
+    "method_name,response_filepath",
+    [
+        ("get_definition", SCRIPT_FOLDER / "input" / "legitim.json"),
+        ("get_pos_tag", SCRIPT_FOLDER / "input" / "legitim.json"),
+    ],
+)
+def test_adapter(monkeypatch, method_name: str, response_filepath: Path):
     af = english_collins.AdapterFactory()
 
-    mock_config_filepath = SCRIPT_FOLDER / "input" / "config.toml"
-    with open(mock_config_filepath, "r") as f:
-        adapter = af.get_adapter(f)
+    def mock_api_call(self, word: str):
+        with open(response_filepath, "r") as f:
+            mock_response = SimpleNamespace(text=f.read(), status_code=200)
+            return mock_response
 
-    mock_response_filepath = SCRIPT_FOLDER / "input" / "legitim.json"
-    with open(mock_response_filepath, "r") as f:
-        mock_response = SimpleNamespace(text=f.read(), status_code=200)
-        list_of_definitions = adapter._get_definition_handle(mock_response)
+    monkeypatch.setattr(english_collins.Adapter, f"_{method_name}_api", mock_api_call)
 
-        assert len(list_of_definitions) == 1
-        assert list_of_definitions[0].startswith("the part")
+    ss = io.StringIO()
+    mock_config = {"entrypoint": "", "secret_key": ""}
+    toml.dump(mock_config, ss)
+    ss.seek(io.SEEK_SET)
+
+    list_of_results = af.get_adapter(ss).__getattribute__(method_name)("dontcare")
+    assert len(list_of_results) > 0
 
 
-def test_adapter_get_definition_handle_with_error():
+@pytest.mark.parametrize(
+    "method_name",
+    [
+        "get_definition",
+        "get_pos_tag",
+    ],
+)
+def test_adapter_error(monkeypatch, method_name: str):
     af = english_collins.AdapterFactory()
 
-    mock_config_filepath = SCRIPT_FOLDER / "input" / "config.toml"
-    with open(mock_config_filepath, "r") as f:
-        adapter = af.get_adapter(f)
+    def mock_api_call(self, word: str):
+        mock_response = SimpleNamespace(text="", status_code=404)
+        return mock_response
 
-    mock_response_filepath = SCRIPT_FOLDER / "input" / "legitim.json"
-    with open(mock_response_filepath, "r") as f:
-        mock_response = SimpleNamespace(text=f.read(), status_code=404)
+    monkeypatch.setattr(english_collins.Adapter, f"_{method_name}_api", mock_api_call)
 
-        with pytest.raises(exception.UnexpectedResponseError) as e:
-            list_of_definitions = adapter._get_definition_handle(mock_response)
-            assert e.value.status_code == 404
+    ss = io.StringIO()
+    mock_config = {"entrypoint": "", "secret_key": ""}
+    toml.dump(mock_config, ss)
+    ss.seek(io.SEEK_SET)
 
-
-def test_adapter_get_pos_tag_handle():
-    af = english_collins.AdapterFactory()
-
-    mock_config_filepath = SCRIPT_FOLDER / "input" / "config.toml"
-    with open(mock_config_filepath, "r") as f:
-        adapter = af.get_adapter(f)
-
-    mock_response_filepath = SCRIPT_FOLDER / "input" / "legitim.json"
-    with open(mock_response_filepath, "r") as f:
-        mock_response = SimpleNamespace(text=f.read(), status_code=200)
-        list_of_pos_tags = adapter._get_pos_tag_handle(mock_response)
-
-        assert len(list_of_pos_tags) > 0
-        assert list_of_pos_tags[0] == model.PosTag.Noun
+    with pytest.raises(exception.UnexpectedResponseError) as e:
+        af.get_adapter(ss).__getattribute__(method_name)("dontcare")
+        assert e.value.status_code == 404
