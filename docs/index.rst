@@ -9,3 +9,10 @@ Start here
    :maxdepth: 1
 
    getting-started
+
+API Reference
+================
+.. toctree::
+   :maxdepth: 1
+
+   plugin-module
