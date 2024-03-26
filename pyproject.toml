@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "word-def-plugin-english-collins"
-version = "0.1.0"
+version = "0.2.0"
 description = "Plugin to word-def package that connects to the English Collins dictionary"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -21,8 +21,8 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = ["beautifulsoup4","pycountry", "toml",
-"collins-dictionary-api-client @ git+https://github.com/danoan/collins-dictionary-api-client.git",
-"word-def @ git+https://github.com/danoan/word-def.git@v0.1.0"
+"collins-dictionary-api-client(<=1.0.0)",
+"word-def(<=1.0.0)"
 ]
 
 [project.urls]
@@ -53,7 +53,7 @@ pythonpath = [
 "test" # Needed in order to import conftest.py in test modules
 ]
 markers = [
-    "api"
+    "api: These tests make calls to the Collins API"
 ]
 
 # -------------------- code coverage --------------------
