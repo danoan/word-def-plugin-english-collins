@@ -43,10 +43,6 @@ entrypoint="COLLINS API URL"
 secret_key="PERSONAL SECRET KEY"
 ```
 
-The list of parameters accepted by the plugin is the same as the members of the
-dataclass [Configuration](./reference/danoan.word_def.plugins.modules).
-
-
 ## Contributing
 
 Please reference to our [contribution](http://danoan.github.io/word-def-plugin-english-collins/contributing) and [code-of-conduct](http://danoan.github.io/word-def-plugin-english-collins/code-of-conduct) guidelines.
