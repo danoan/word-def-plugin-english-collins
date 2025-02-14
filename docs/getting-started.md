@@ -22,6 +22,7 @@ You need to have the [word-def](https://github.com/danoan/word-def) package inst
 
 ```bash
 $ word-def --plugin-configuration-filepath plugin-config.toml get-definition joy eng
+
 1. a deep feeling or condition of happiness or contentment
 2. something causing such a feeling; a source of happiness
 3. an outward show of pleasure or delight; rejoicing
@@ -33,10 +34,14 @@ $ word-def --plugin-configuration-filepath plugin-config.toml get-definition joy
    The [word-def documentation](https://danoan.github.io/word-def/how-to/setup-a-plugin.html)
    has more information about how to setup the plugin configuration file.
 ```
+## Plugin parameters
 
-The list of parameters accepted by the plugin is the same as the members of the
-dataclass [Configuration](https://danoan.github.io/word-def-plugin-multilanguage-chatgpt/reference/danoan.word_def.plugins.modules.html#danoan.word_def.plugins.modules.english_collins.Configuration).
+To configure the plugin, create the `plugin-config.toml` file similar to the one below:
 
+```toml
+entrypoint="COLLINS API URL"
+secret_key="PERSONAL SECRET KEY"
+```
 
 ## Contributing
 
